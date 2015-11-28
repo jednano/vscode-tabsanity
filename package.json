@@ -10,14 +10,73 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extension.sayHello"
+		"*"
 	],
 	"main": "./out/src/extension",
+	"keybindings": [
+		{
+			"key": "left",
+			"command": "tabSanity.cursorLeft",
+			"when": "editorTextFocus"
+		},
+		{
+			"key": "shift+left",
+			"command": "tabSanity.cursorLeftSelect",
+			"when": "editorTextFocus"
+		},
+		{
+			"key": "right",
+			"command": "tabSanity.cursorRight",
+			"when": "editorTextFocus"
+		},
+		{
+			"key": "shift+right",
+			"command": "tabSanity.cursorRightSelect",
+			"when": "editorTextFocus"
+		},
+		{
+			"key": "shift+backspace",
+			"command": "tabSanity.deleteLeft",
+			"when": "editorTextFocus"
+		},
+		{
+			"key": "backspace",
+			"command": "tabSanity.deleteLeft",
+			"when": "editorTextFocus"
+		},
+		{
+			"key": "delete",
+			"command": "tabSanity.deleteRight",
+			"when": "editorTextFocus"
+		}
+	],
 	"contributes": {
-		"commands": [{
-			"command": "extension.sayHello",
-			"title": "Hello World"
-		}]
+		"commands": [
+			{
+				"command": "tabSanity.cursorLeft",
+				"title": "Move cursor left"
+			},
+			{
+				"command": "tabSanity.cursorLeftSelect",
+				"title": "Move cursor left and select"
+			},
+			{
+				"command": "tabSanity.cursorRight",
+				"title": "Move cursor right"
+			},
+			{
+				"command": "tabSanity.cursorRightSelect",
+				"title": "Move cursor right and select"
+			},
+			{
+				"command": "tabSanity.deleteLeft",
+				"title": "Delete left"
+			},
+			{
+				"command": "tabSanity.deleteRight",
+				"title": "Delete right"
+			}
+		]
 	},
 	"scripts": {
 		"vscode:prepublish": "node ./node_modules/vscode/bin/compile",
