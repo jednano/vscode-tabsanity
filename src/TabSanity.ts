@@ -49,7 +49,7 @@ export default class TabSanity {
 				previousLine.range.end.character
 			);
 		}
-		if (this.peekLeft(1) === TAB) {
+		if (this.peekLeft(start, 1) === TAB) {
 			return start.with(start.line, start.character - 1);
 		}
 		const firstNonWhite = this.getFirstNonWhitespacePosition(start.line);
@@ -67,14 +67,11 @@ export default class TabSanity {
 		return start.with(start.line, character);
 	}
 
-	private peekLeft(chars: number) {
-		const { start } = this.editor.selection;
-		return this.doc.getText(
-			new Range(
-				start.with(start.line, start.character - chars),
-				start
-			)
-		);
+	private peekLeft(position: Position, chars: number) {
+		return this.doc.getText(new Range(
+			position.with(position.line, position.character - chars),
+			position
+		));
 	}
 
 	private getFirstNonWhitespacePosition(lineNumber: number, offset = 0) {
@@ -92,7 +89,7 @@ export default class TabSanity {
 				selection.anchor,
 				this.getPositionLeftOfStart(selection.active)
 			);
-		});
+		}, this);
 	}
 
 	public cursorRight() {
@@ -116,7 +113,7 @@ export default class TabSanity {
 				nextLine.range.start.character
 			);
 		}
-		if (this.peekRight(1) === TAB) {
+		if (this.peekRight(end, 1) === TAB) {
 			return end.with(end.line, end.character + 1);
 		}
 		const firstNonWhite = this.getFirstNonWhitespacePosition(end.line, -1);
@@ -137,14 +134,11 @@ export default class TabSanity {
 		return end.with(end.line, character);
 	}
 
-	private peekRight(chars: number) {
-		const { end } = this.editor.selection;
-		return this.doc.getText(
-			new Range(
-				end,
-				end.with(end.line, end.character + chars)
-			)
-		);
+	private peekRight(position: Position, chars: number) {
+		return this.doc.getText(new Range(
+			position,
+			position.with(position.line, position.character + chars)
+		));
 	}
 
 	public cursorRightSelect() {
@@ -153,7 +147,7 @@ export default class TabSanity {
 				selection.anchor,
 				this.getPositionRightOfEnd(selection.active)
 			);
-		});
+		}, this);
 	}
 
 	public deleteLeft() {
