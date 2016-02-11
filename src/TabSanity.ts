@@ -52,8 +52,8 @@ export default class TabSanity {
 		if (this.peekLeft(pos, 1) === TAB) {
 			return pos.with(pos.line, pos.character - 1);
 		}
-		const firstNonWhite = this.getFirstNonWhitespacePosition(pos.line);
-		if (pos.isAfter(firstNonWhite)) {
+		const firstNonWhitespace = this.findFirstNonWhitespace(pos.line);
+		if (pos.isAfter(firstNonWhitespace)) {
 			return pos.with(pos.line, pos.character - 1);
 		}
 		if (pos.character % this.tabSize) {
@@ -74,7 +74,7 @@ export default class TabSanity {
 		));
 	}
 
-	private getFirstNonWhitespacePosition(lineNumber: number, offset = 0) {
+	private findFirstNonWhitespace(lineNumber: number, offset = 0) {
 		const line = this.doc.lineAt(lineNumber);
 		let character = line.firstNonWhitespaceCharacterIndex + offset;
 		if (character < 0) {
@@ -116,8 +116,8 @@ export default class TabSanity {
 		if (this.peekRight(pos, 1) === TAB) {
 			return pos.with(pos.line, pos.character + 1);
 		}
-		const firstNonWhite = this.getFirstNonWhitespacePosition(pos.line, -1);
-		if (!pos.isBefore(firstNonWhite)) {
+		const firstNonWhitespace = this.findFirstNonWhitespace(pos.line, -1);
+		if (!pos.isBefore(firstNonWhitespace)) {
 			return pos.with(pos.line, pos.character + 1);
 		}
 		let spaces = this.tabSize;
