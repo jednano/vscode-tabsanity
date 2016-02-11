@@ -12,6 +12,8 @@ const TAB = '\t';
 
 export default class TabSanity {
 
+	allSpaces = /^ +$/;
+
 	private get editor() {
 		return window.activeTextEditor;
 	}
@@ -39,32 +41,71 @@ export default class TabSanity {
 	}
 
 	private findNextLeftPosition(pos: Position) {
-		if (pos.character === 0) {
-			if (pos.line === 0) {
+		if (this.isBeginningOfLine(pos)) {
+			if (this.isFirstLine(pos)) {
 				return pos;
 			}
-			const previousLine = this.doc.lineAt(pos.line - 1);
-			return pos.with(
-				previousLine.lineNumber,
-				previousLine.range.end.character
-			);
+			return this.endOfPreviousLine(pos);
 		}
-		if (this.peekLeft(pos, 1) === TAB) {
-			return pos.with(pos.line, pos.character - 1);
+
+		if (
+			this.tabSize <= 1
+			|| this.peekLeft(pos, 1) === TAB
+			|| !this.isWithinIndentationRange(pos)
+		) {
+			return this.oneSpaceLeft(pos);
 		}
-		const firstNonWhitespace = this.findFirstNonWhitespace(pos.line);
-		if (pos.isAfter(firstNonWhitespace)) {
-			return pos.with(pos.line, pos.character - 1);
+
+		return this.findPreviousTabStop(pos);
+	}
+
+	private isBeginningOfLine(pos: Position) {
+		return pos.character === 0;
+	}
+
+	private isFirstLine(pos: Position) {
+		return pos.line === 0;
+	}
+
+	private endOfPreviousLine(pos: Position) {
+		const previousLine = this.doc.lineAt(pos.line - 1);
+		return pos.with(
+			previousLine.lineNumber,
+			previousLine.range.end.character
+		);
+	}
+
+	private isWithinIndentationRange(pos: Position) {
+		if (isAfterFirstNonWhitespace.call(this)) {
+			return false;
 		}
-		if (pos.character % this.tabSize) {
-			return pos.with(pos.line, pos.character - 1);
+
+		const extraSpaces = pos.character % this.tabSize;
+		if (extraSpaces === 0) {
+			return true;
 		}
+
+		const nextTabStop = this.tabSize - extraSpaces;
+		return this.allSpaces.test(
+			this.peekRight(pos, nextTabStop)
+		);
+
+		function isAfterFirstNonWhitespace() {
+			return pos.isAfter(this.findFirstNonWhitespace(pos.line));
+		}
+	}
+
+	private oneSpaceLeft(pos: Position) {
+		return pos.with(pos.line, pos.character - 1);
+	}
+
+	private findPreviousTabStop(pos: Position) {
 		let spaces = this.tabSize;
-		let character = pos.character - spaces;
+		let previousTabStop = pos.character - spaces;
 		if (spaces > 1) {
-			character += (this.tabSize - character) % this.tabSize;
+			previousTabStop += (this.tabSize - previousTabStop) % this.tabSize;
 		}
-		return pos.with(pos.line, character);
+		return pos.with(pos.line, previousTabStop);
 	}
 
 	private peekLeft(position: Position, chars: number) {
@@ -102,36 +143,38 @@ export default class TabSanity {
 	}
 
 	private findNextRightPosition(pos: Position) {
-		const lineLength = this.doc.lineAt(pos.line).text.length;
-		if (pos.character === lineLength) {
-			if (pos.line === (this.doc.lineCount - 1)) {
+		if (this.isEndOfLine(pos)) {
+			if (this.isLastLine(pos)) {
 				return pos;
 			}
-			const nextLine = this.doc.lineAt(pos.line + 1);
-			return pos.with(
-				nextLine.lineNumber,
-				nextLine.range.start.character
-			);
+			return this.startOfNextLine(pos);
 		}
-		if (this.peekRight(pos, 1) === TAB) {
-			return pos.with(pos.line, pos.character + 1);
+
+		if (
+			this.tabSize <= 1
+			|| this.peekRight(pos, 1) === TAB
+			|| !this.isWithinIndentationRange(pos)
+		) {
+			return this.oneSpaceRight(pos);
 		}
-		const firstNonWhitespace = this.findFirstNonWhitespace(pos.line, -1);
-		if (!pos.isBefore(firstNonWhitespace)) {
-			return pos.with(pos.line, pos.character + 1);
-		}
-		let spaces = this.tabSize;
-		let character = pos.character + spaces;
-		const posLine = this.doc.lineAt(pos.line);
-		if (character > posLine.firstNonWhitespaceCharacterIndex) {
-			return pos.with(pos.line, pos.character + 1);
-		}
-		if (character > lineLength) {
-			character = lineLength;
-		} else if (spaces > 1) {
-			character += (this.tabSize - character) % this.tabSize;
-		}
-		return pos.with(pos.line, character);
+
+		return this.findNextTabStop(pos);
+	}
+
+	private isEndOfLine(pos: Position) {
+		return pos.character === this.doc.lineAt(pos.line).text.length;
+	}
+
+	private isLastLine(pos: Position) {
+		return pos.line === this.doc.lineCount - 1;
+	}
+
+	private startOfNextLine(pos: Position) {
+		const nextLine = this.doc.lineAt(pos.line + 1);
+		return pos.with(
+			nextLine.lineNumber,
+			nextLine.range.start.character
+		);
 	}
 
 	private peekRight(position: Position, chars: number) {
@@ -139,6 +182,26 @@ export default class TabSanity {
 			position,
 			position.with(position.line, position.character + chars)
 		));
+	}
+
+	private oneSpaceRight(pos: Position) {
+		return pos.with(pos.line, pos.character + 1);
+	}
+
+	private findNextTabStop(pos: Position) {
+		const spaces = this.tabSize;
+		let nextTabStop = pos.character + spaces;
+		const textLine = this.doc.lineAt(pos.line);
+		if (nextTabStop > textLine.firstNonWhitespaceCharacterIndex) {
+			return this.oneSpaceRight(pos);
+		}
+		const lineLength = textLine.text.length
+		if (nextTabStop > lineLength) {
+			nextTabStop = lineLength;
+		} else if (spaces > 1) {
+			nextTabStop += (this.tabSize - nextTabStop) % this.tabSize;
+		}
+		return pos.with(pos.line, nextTabStop);
 	}
 
 	public cursorRightSelect() {
