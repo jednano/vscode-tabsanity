@@ -30,7 +30,7 @@ export default class TabSanity {
 			this.moveToPosition(start);
 			return;
 		}
-		this.moveToPosition(this.getPositionLeftOfStart(start));
+		this.moveToPosition(this.findNextLeftPosition(start));
 	}
 
 	private moveToPosition(anchor: Position, active = anchor) {
@@ -38,33 +38,33 @@ export default class TabSanity {
 		this.editor.revealRange(new Range(anchor, active));
 	}
 
-	private getPositionLeftOfStart(start: Position) {
-		if (start.character === 0) {
-			if (start.line === 0) {
-				return start;
+	private findNextLeftPosition(pos: Position) {
+		if (pos.character === 0) {
+			if (pos.line === 0) {
+				return pos;
 			}
-			const previousLine = this.doc.lineAt(start.line - 1);
-			return start.with(
+			const previousLine = this.doc.lineAt(pos.line - 1);
+			return pos.with(
 				previousLine.lineNumber,
 				previousLine.range.end.character
 			);
 		}
-		if (this.peekLeft(start, 1) === TAB) {
-			return start.with(start.line, start.character - 1);
+		if (this.peekLeft(pos, 1) === TAB) {
+			return pos.with(pos.line, pos.character - 1);
 		}
-		const firstNonWhite = this.getFirstNonWhitespacePosition(start.line);
-		if (start.isAfter(firstNonWhite)) {
-			return start.with(start.line, start.character - 1);
+		const firstNonWhite = this.getFirstNonWhitespacePosition(pos.line);
+		if (pos.isAfter(firstNonWhite)) {
+			return pos.with(pos.line, pos.character - 1);
 		}
-		if (start.character % this.tabSize) {
-			return start.with(start.line, start.character - 1);
+		if (pos.character % this.tabSize) {
+			return pos.with(pos.line, pos.character - 1);
 		}
 		let spaces = this.tabSize;
-		let character = start.character - spaces;
+		let character = pos.character - spaces;
 		if (spaces > 1) {
 			character += (this.tabSize - character) % this.tabSize;
 		}
-		return start.with(start.line, character);
+		return pos.with(pos.line, character);
 	}
 
 	private peekLeft(position: Position, chars: number) {
@@ -87,7 +87,7 @@ export default class TabSanity {
 		this.editor.selections = this.editor.selections.map(selection => {
 			return new Selection(
 				selection.anchor,
-				this.getPositionLeftOfStart(selection.active)
+				this.findNextLeftPosition(selection.active)
 			);
 		}, this);
 	}
@@ -98,40 +98,40 @@ export default class TabSanity {
 			this.moveToPosition(end);
 			return;
 		}
-		this.moveToPosition(this.getPositionRightOfEnd(end));
+		this.moveToPosition(this.findNextRightPosition(end));
 	}
 
-	private getPositionRightOfEnd(end: Position) {
-		const lineLength = this.doc.lineAt(end.line).text.length;
-		if (end.character === lineLength) {
-			if (end.line === (this.doc.lineCount - 1)) {
-				return end;
+	private findNextRightPosition(pos: Position) {
+		const lineLength = this.doc.lineAt(pos.line).text.length;
+		if (pos.character === lineLength) {
+			if (pos.line === (this.doc.lineCount - 1)) {
+				return pos;
 			}
-			const nextLine = this.doc.lineAt(end.line + 1);
-			return end.with(
+			const nextLine = this.doc.lineAt(pos.line + 1);
+			return pos.with(
 				nextLine.lineNumber,
 				nextLine.range.start.character
 			);
 		}
-		if (this.peekRight(end, 1) === TAB) {
-			return end.with(end.line, end.character + 1);
+		if (this.peekRight(pos, 1) === TAB) {
+			return pos.with(pos.line, pos.character + 1);
 		}
-		const firstNonWhite = this.getFirstNonWhitespacePosition(end.line, -1);
-		if (!end.isBefore(firstNonWhite)) {
-			return end.with(end.line, end.character + 1);
+		const firstNonWhite = this.getFirstNonWhitespacePosition(pos.line, -1);
+		if (!pos.isBefore(firstNonWhite)) {
+			return pos.with(pos.line, pos.character + 1);
 		}
 		let spaces = this.tabSize;
-		let character = end.character + spaces;
-		const endLine = this.doc.lineAt(end.line);
-		if (character > endLine.firstNonWhitespaceCharacterIndex) {
-			return end.with(end.line, end.character + 1);
+		let character = pos.character + spaces;
+		const posLine = this.doc.lineAt(pos.line);
+		if (character > posLine.firstNonWhitespaceCharacterIndex) {
+			return pos.with(pos.line, pos.character + 1);
 		}
 		if (character > lineLength) {
 			character = lineLength;
 		} else if (spaces > 1) {
 			character += (this.tabSize - character) % this.tabSize;
 		}
-		return end.with(end.line, character);
+		return pos.with(pos.line, character);
 	}
 
 	private peekRight(position: Position, chars: number) {
@@ -145,7 +145,7 @@ export default class TabSanity {
 		this.editor.selections = this.editor.selections.map(selection => {
 			return new Selection(
 				selection.anchor,
-				this.getPositionRightOfEnd(selection.active)
+				this.findNextRightPosition(selection.active)
 			);
 		}, this);
 	}
@@ -157,7 +157,7 @@ export default class TabSanity {
 				this.delete(selection);
 				continue;
 			}
-			const deleteStartPosition = this.getPositionLeftOfStart(start);
+			const deleteStartPosition = this.findNextLeftPosition(start);
 			if (deleteStartPosition) {
 				this.delete(new Range(deleteStartPosition, start));
 			}
@@ -177,7 +177,7 @@ export default class TabSanity {
 				this.delete(selection);
 				continue;
 			}
-			const deleteEndPosition = this.getPositionRightOfEnd(end);
+			const deleteEndPosition = this.findNextRightPosition(end);
 			if (deleteEndPosition) {
 				this.delete(new Range(end, deleteEndPosition));
 			}
