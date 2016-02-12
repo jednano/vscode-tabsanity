@@ -1,99 +1,99 @@
 {
-	"name": "tabsanity",
-	"displayName": "TabSanity",
-	"description": "Navigate or modify soft tabs as if they were hard tabs.",
-	"version": "0.0.2",
-	"publisher": "jedmao",
-	"engines": {
-		"vscode": "^0.10.6"
-	},
-	"author": "Jed Mao",
-	"license": "MIT",
-	"categories": [
-		"Other"
-	],
-	"activationEvents": [
-		"onCommand:tabsanity.cursorLeft",
-		"onCommand:tabsanity.cursorLeftSelect",
-		"onCommand:tabsanity.cursorRight",
-		"onCommand:tabsanity.cursorRightSelect",
-		"onCommand:tabsanity.deleteLeft",
-		"onCommand:tabsanity.deleteRight"
-	],
-	"main": "./out/src/extension",
-	"contributes": {
-		"keybindings": [
-			{
-				"key": "left",
-				"command": "tabsanity.cursorLeft",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "shift+left",
-				"command": "tabsanity.cursorLeftSelect",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "right",
-				"command": "tabsanity.cursorRight",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "shift+right",
-				"command": "tabsanity.cursorRightSelect",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "shift+backspace",
-				"command": "tabsanity.deleteLeft",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "backspace",
-				"command": "tabsanity.deleteLeft",
-				"when": "editorTextFocus"
-			},
-			{
-				"key": "delete",
-				"command": "tabsanity.deleteRight",
-				"when": "editorTextFocus"
-			}
-		],
-		"commands": [
-			{
-				"command": "tabsanity.cursorLeft",
-				"title": "TabSanity: Move cursor left"
-			},
-			{
-				"command": "tabsanity.cursorLeftSelect",
-				"title": "TabSanity: Move cursor left and select"
-			},
-			{
-				"command": "tabsanity.cursorRight",
-				"title": "TabSanity: Move cursor right"
-			},
-			{
-				"command": "tabsanity.cursorRightSelect",
-				"title": "TabSanity: Move cursor right and select"
-			},
-			{
-				"command": "tabsanity.deleteLeft",
-				"title": "TabSanity: Delete left"
-			},
-			{
-				"command": "tabsanity.deleteRight",
-				"title": "TabSanity: Delete right"
-			}
-		]
-	},
-	"scripts": {
-		"postinstall": "node ./node_modules/vscode/bin/install",
-		"vscode:prepublish": "node ./node_modules/vscode/bin/compile",
-		"compile": "node ./node_modules/vscode/bin/compile -watch -p ./",
-		"test": "node ./node_modules/vscode/bin/test"
-	},
-	"devDependencies": {
-		"typescript": "^1.7.5",
-		"vscode": "^0.11.1"
-	}
+  "name": "tabsanity",
+  "displayName": "TabSanity",
+  "description": "Navigate or modify soft tabs as if they were hard tabs.",
+  "version": "0.0.2",
+  "publisher": "jedmao",
+  "engines": {
+    "vscode": "^0.10.6"
+  },
+  "author": "Jed Mao",
+  "license": "MIT",
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:tabsanity.cursorLeft",
+    "onCommand:tabsanity.cursorLeftSelect",
+    "onCommand:tabsanity.cursorRight",
+    "onCommand:tabsanity.cursorRightSelect",
+    "onCommand:tabsanity.deleteLeft",
+    "onCommand:tabsanity.deleteRight"
+  ],
+  "main": "./out/src/extension",
+  "contributes": {
+    "keybindings": [
+      {
+        "key": "left",
+        "command": "tabsanity.cursorLeft",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "shift+left",
+        "command": "tabsanity.cursorLeftSelect",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "right",
+        "command": "tabsanity.cursorRight",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "shift+right",
+        "command": "tabsanity.cursorRightSelect",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "shift+backspace",
+        "command": "tabsanity.deleteLeft",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "backspace",
+        "command": "tabsanity.deleteLeft",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "delete",
+        "command": "tabsanity.deleteRight",
+        "when": "editorTextFocus"
+      }
+    ],
+    "commands": [
+      {
+        "command": "tabsanity.cursorLeft",
+        "title": "TabSanity: Move cursor left"
+      },
+      {
+        "command": "tabsanity.cursorLeftSelect",
+        "title": "TabSanity: Move cursor left and select"
+      },
+      {
+        "command": "tabsanity.cursorRight",
+        "title": "TabSanity: Move cursor right"
+      },
+      {
+        "command": "tabsanity.cursorRightSelect",
+        "title": "TabSanity: Move cursor right and select"
+      },
+      {
+        "command": "tabsanity.deleteLeft",
+        "title": "TabSanity: Delete left"
+      },
+      {
+        "command": "tabsanity.deleteRight",
+        "title": "TabSanity: Delete right"
+      }
+    ]
+  },
+  "scripts": {
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "vscode:prepublish": "node ./node_modules/vscode/bin/compile",
+    "compile": "node ./node_modules/vscode/bin/compile -watch -p ./",
+    "test": "node ./node_modules/vscode/bin/test"
+  },
+  "devDependencies": {
+    "typescript": "^1.7.5",
+    "vscode": "^0.11.1"
+  }
 }
