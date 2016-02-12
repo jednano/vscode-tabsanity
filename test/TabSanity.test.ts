@@ -40,6 +40,22 @@ suite('TabSanity Tests', () => {
 		}
 	});
 
+	test('#cursorRightSelect', () => {
+		selectBeginningOfDocument();
+		for (let i = 0; i < expectedPositions.length; i++) {
+			const positions = expectedPositions[i];
+			for (let j = 0; j < positions.length; j++) {
+				if (i === 0 && j === 0) {
+					continue;
+				}
+				ts.cursorRightSelect();
+				const actual = ts.editor.selection.end;
+				const expected = new Position(i, positions[j]);
+				assert.strictEqual(actual.isEqual(expected), true);
+			}
+		}
+	});
+
 	test('#cursorLeft', () => {
 		selectEndOfDocument();
 		for (let i = expectedPositions.length - 1; i >= 0; i--) {
@@ -54,6 +70,26 @@ suite('TabSanity Tests', () => {
 				const actual = ts.cursorLeft().character;
 				const expected = positions[j];
 				assert.strictEqual(actual, expected);
+			}
+		}
+	});
+
+	test('#cursorLeftSelect', () => {
+		selectEndOfDocument();
+		for (let i = expectedPositions.length - 1; i >= 0; i--) {
+			const positions = expectedPositions[i];
+			for (let j = positions.length - 1; j >= 0; j--) {
+				if (
+					i === expectedPositions.length - 1
+					&& j === positions.length - 1
+				) {
+					continue;
+				}
+
+				ts.cursorLeftSelect();
+				const actual = ts.editor.selection.start;
+				const expected = new Position(i, positions[j]);
+				assert.strictEqual(actual.isEqual(expected), true);
 			}
 		}
 	});
