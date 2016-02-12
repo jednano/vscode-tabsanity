@@ -12,7 +12,7 @@ import {
 	TextLine
 } from './Mocks';
 
-suite("TabSanity Tests", () => {
+suite('TabSanity Tests', () => {
 
 	const ts = createTabSanityFromLines([
 		'    foo  ',
@@ -25,7 +25,7 @@ suite("TabSanity Tests", () => {
 		[0, 4, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
 	];
 
-	test("#cursorRight", () => {
+	test('#cursorRight', () => {
 		selectBeginningOfDocument();
 		for (let i = 0; i < expectedPositions.length; i++) {
 			const positions = expectedPositions[i];
@@ -33,14 +33,14 @@ suite("TabSanity Tests", () => {
 				if (i === 0 && j === 0) {
 					continue;
 				}
-				const expected = positions[j];
 				const actual = ts.cursorRight().character;
+				const expected = positions[j];
 				assert.strictEqual(actual, expected);
 			}
 		}
 	});
 
-	test("#cursorLeft", () => {
+	test('#cursorLeft', () => {
 		selectEndOfDocument();
 		for (let i = expectedPositions.length - 1; i >= 0; i--) {
 			const positions = expectedPositions[i];
@@ -51,8 +51,8 @@ suite("TabSanity Tests", () => {
 				) {
 					continue;
 				}
-				const expected = positions[j];
 				const actual = ts.cursorLeft().character;
+				const expected = positions[j];
 				assert.strictEqual(actual, expected);
 			}
 		}

@@ -1,3 +1,7 @@
+## 0.0.3
+- Various bug fixes.
+- Added tests for `#cursorLeft` and `#cursorRight`.
+
 ## 0.0.2
 - Fix cursor left/right selection error.
 
