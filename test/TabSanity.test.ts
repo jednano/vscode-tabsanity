@@ -19,7 +19,7 @@ suite('TabSanity Tests', () => {
 		'  bar    ',
 		'          baz    qux '
 	]);
-	const expectedPositions = [
+	const expectedStops = [
 		[0, 4, 5, 6, 7, 8, 9],
 		[0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
 		[0, 4, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
@@ -27,14 +27,14 @@ suite('TabSanity Tests', () => {
 
 	test('#cursorRight', () => {
 		selectBeginningOfDocument();
-		for (let i = 0; i < expectedPositions.length; i++) {
-			const positions = expectedPositions[i];
-			for (let j = 0; j < positions.length; j++) {
+		for (let i = 0; i < expectedStops.length; i++) {
+			const stops = expectedStops[i];
+			for (let j = 0; j < stops.length; j++) {
 				if (i === 0 && j === 0) {
 					continue;
 				}
 				const actual = ts.cursorRight().character;
-				const expected = positions[j];
+				const expected = stops[j];
 				assert.strictEqual(actual, expected);
 			}
 		}
@@ -42,33 +42,37 @@ suite('TabSanity Tests', () => {
 
 	test('#cursorRightSelect', () => {
 		selectBeginningOfDocument();
-		for (let i = 0; i < expectedPositions.length; i++) {
-			const positions = expectedPositions[i];
-			for (let j = 0; j < positions.length; j++) {
+		let firstAnchor: Position;
+		for (let i = 0; i < expectedStops.length; i++) {
+			const stops = expectedStops[i];
+			for (let j = 0; j < stops.length; j++) {
+				const stop = stops[j];
 				if (i === 0 && j === 0) {
+					firstAnchor = new Position(i, stop);
 					continue;
 				}
 				ts.cursorRightSelect();
-				const actual = ts.editor.selection.end;
-				const expected = new Position(i, positions[j]);
-				assert.strictEqual(actual.isEqual(expected), true);
+				const { anchor, active } = ts.editor.selection;
+				assert.strictEqual(anchor.isEqual(firstAnchor), true);
+				const expected = new Position(i, stop);
+				assert.strictEqual(active.isEqual(expected), true);
 			}
 		}
 	});
 
 	test('#cursorLeft', () => {
 		selectEndOfDocument();
-		for (let i = expectedPositions.length - 1; i >= 0; i--) {
-			const positions = expectedPositions[i];
-			for (let j = positions.length - 1; j >= 0; j--) {
+		for (let i = expectedStops.length - 1; i >= 0; i--) {
+			const stops = expectedStops[i];
+			for (let j = stops.length - 1; j >= 0; j--) {
 				if (
-					i === expectedPositions.length - 1
-					&& j === positions.length - 1
+					i === expectedStops.length - 1
+					&& j === stops.length - 1
 				) {
 					continue;
 				}
 				const actual = ts.cursorLeft().character;
-				const expected = positions[j];
+				const expected = stops[j];
 				assert.strictEqual(actual, expected);
 			}
 		}
@@ -76,20 +80,23 @@ suite('TabSanity Tests', () => {
 
 	test('#cursorLeftSelect', () => {
 		selectEndOfDocument();
-		for (let i = expectedPositions.length - 1; i >= 0; i--) {
-			const positions = expectedPositions[i];
-			for (let j = positions.length - 1; j >= 0; j--) {
+		let firstAnchor: Position;
+		for (let i = expectedStops.length - 1; i >= 0; i--) {
+			const stops = expectedStops[i];
+			for (let j = stops.length - 1; j >= 0; j--) {
+				const stop = stops[j];
 				if (
-					i === expectedPositions.length - 1
-					&& j === positions.length - 1
+					i === expectedStops.length - 1
+					&& j === stops.length - 1
 				) {
+					firstAnchor = new Position(i, stop);
 					continue;
 				}
-
 				ts.cursorLeftSelect();
-				const actual = ts.editor.selection.start;
-				const expected = new Position(i, positions[j]);
-				assert.strictEqual(actual.isEqual(expected), true);
+				const { anchor, active } = ts.editor.selection;
+				assert.strictEqual(anchor.isEqual(firstAnchor), true);
+				const expected = new Position(i, stop);
+				assert.strictEqual(active.isEqual(expected), true);
 			}
 		}
 	});
