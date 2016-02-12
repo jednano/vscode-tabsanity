@@ -48,15 +48,32 @@ export default class TabSanity {
 			return this.endOfPreviousLine(pos);
 		}
 
+		const previousPosition = pos.with(pos.line, pos.character - 1);
 		if (
 			this.tabSize <= 1
+			|| this.isOnATabStop(previousPosition)
 			|| this.peekLeft(pos, 1) === TAB
-			|| !this.isWithinIndentationRange(pos)
+			|| !this.isWithinLeadingWhitespace(previousPosition)
+			|| this.isWithinAlignmentRange(previousPosition)
 		) {
-			return this.oneSpaceLeft(pos);
+			return previousPosition;
 		}
 
 		return this.findPreviousTabStop(pos);
+	}
+
+	private isWithinLeadingWhitespace(pos: Position) {
+		return pos.isBefore(this.findFirstNonWhitespace(pos.line));
+	}
+
+	private isOnATabStop(pos: Position) {
+		return !(pos.character % this.tabSize);
+	}
+
+	private isWithinAlignmentRange(pos: Position) {
+		const extraSpaces = pos.character % this.tabSize;
+		const nextTabStop = this.tabSize - extraSpaces;
+		return !this.allSpaces.test(this.peekRight(pos, nextTabStop));
 	}
 
 	private isBeginningOfLine(pos: Position) {
@@ -73,30 +90,6 @@ export default class TabSanity {
 			previousLine.lineNumber,
 			previousLine.range.end.character
 		);
-	}
-
-	private isWithinIndentationRange(pos: Position) {
-		if (isAfterFirstNonWhitespace.call(this)) {
-			return false;
-		}
-
-		const extraSpaces = pos.character % this.tabSize;
-		if (extraSpaces === 0) {
-			return true;
-		}
-
-		const nextTabStop = this.tabSize - extraSpaces;
-		return this.allSpaces.test(
-			this.peekRight(pos, nextTabStop)
-		);
-
-		function isAfterFirstNonWhitespace() {
-			return pos.isAfter(this.findFirstNonWhitespace(pos.line));
-		}
-	}
-
-	private oneSpaceLeft(pos: Position) {
-		return pos.with(pos.line, pos.character - 1);
 	}
 
 	private findPreviousTabStop(pos: Position) {
@@ -150,12 +143,15 @@ export default class TabSanity {
 			return this.startOfNextLine(pos);
 		}
 
+		const nextPosition = pos.with(pos.line, pos.character + 1);
 		if (
 			this.tabSize <= 1
+			|| this.isOnATabStop(nextPosition)
 			|| this.peekRight(pos, 1) === TAB
-			|| !this.isWithinIndentationRange(pos)
+			|| !this.isWithinLeadingWhitespace(nextPosition)
+			|| this.isWithinAlignmentRange(nextPosition)
 		) {
-			return this.oneSpaceRight(pos);
+			return nextPosition;
 		}
 
 		return this.findNextTabStop(pos);
@@ -184,18 +180,11 @@ export default class TabSanity {
 		));
 	}
 
-	private oneSpaceRight(pos: Position) {
-		return pos.with(pos.line, pos.character + 1);
-	}
-
 	private findNextTabStop(pos: Position) {
-		const spaces = this.tabSize;
+		let spaces = this.tabSize;
 		let nextTabStop = pos.character + spaces;
-		const textLine = this.doc.lineAt(pos.line);
-		if (nextTabStop > textLine.firstNonWhitespaceCharacterIndex) {
-			return this.oneSpaceRight(pos);
-		}
-		const lineLength = textLine.text.length
+		const textLine = this.doc.lineAt(pos.line)
+		const lineLength = textLine.text.length;
 		if (nextTabStop > lineLength) {
 			nextTabStop = lineLength;
 		} else if (spaces > 1) {
