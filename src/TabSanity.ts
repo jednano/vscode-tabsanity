@@ -12,13 +12,18 @@ const TAB = '\t';
 
 export default class TabSanity {
 
-	allSpaces = /^ +$/;
+	private allSpaces = /^ +$/;
+	private _editor: TextEditor;
 
-	private get editor() {
-		return window.activeTextEditor;
+	constructor(editor?: TextEditor) {
+		this._editor = editor;
 	}
 
-	private get doc() {
+	public get editor() {
+		return this._editor || window.activeTextEditor;
+	}
+
+	public get doc() {
 		return this.editor.document;
 	}
 
@@ -32,12 +37,14 @@ export default class TabSanity {
 			this.moveToPosition(start);
 			return;
 		}
-		this.moveToPosition(this.findNextLeftPosition(start));
+		return this.moveToPosition(this.findNextLeftPosition(start));
 	}
 
 	private moveToPosition(anchor: Position, active = anchor) {
-		this.editor.selection = new Selection(anchor, active);
-		this.editor.revealRange(new Range(anchor, active));
+		const newSelection = new Selection(anchor, active);
+		this.editor.selections = [newSelection];
+		this.editor.revealRange(newSelection);
+		return anchor;
 	}
 
 	private findNextLeftPosition(pos: Position) {
@@ -132,7 +139,7 @@ export default class TabSanity {
 			this.moveToPosition(end);
 			return;
 		}
-		this.moveToPosition(this.findNextRightPosition(end));
+		return this.moveToPosition(this.findNextRightPosition(end));
 	}
 
 	private findNextRightPosition(pos: Position) {
@@ -214,6 +221,7 @@ export default class TabSanity {
 				this.delete(new Range(deleteStartPosition, start));
 			}
 		}
+		this.editor.revealRange(this.editor.selection);
 	}
 
 	private delete(location: Range|Selection) {
