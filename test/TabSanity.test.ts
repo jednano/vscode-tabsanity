@@ -1,23 +1,17 @@
 import { EOL } from 'os';
 import * as assert from 'assert';
-import * as vscode from 'vscode';
-import {
-	Position,
-	Selection,
-	TextDocument,
-	TextEditor,
-	window
-} from 'vscode';
 
 import TabSanity from '../src/TabSanity';
-import MockTextDocument from './MockTextDocument';
-import MockTextEditor from './MockTextEditor';
-import MockTextLine from './MockTextLine';
+import {
+	TextDocument,
+	TextEditor,
+	TextLine
+} from './Mocks';
 
 suite("TabSanity Tests", () => {
 
 	test("#cursorRight", () => {
-		const ts = mockDocument([
+		const ts = createTabSanityFromLines([
 			'    foo  ',
 			''
 		]);
@@ -33,10 +27,10 @@ suite("TabSanity Tests", () => {
 
 });
 
-function mockDocument(lines: string[]) {
-	const doc = new MockTextDocument(lines.map((line, i) => {
-		return new MockTextLine(line, EOL, i)
+function createTabSanityFromLines(lines: string[]) {
+	const doc = new TextDocument(lines.map((line, i) => {
+		return new TextLine(line, EOL, i)
 	}));
-	const editor = new MockTextEditor(doc);
+	const editor = new TextEditor(doc);
 	return new TabSanity(editor);
 }
