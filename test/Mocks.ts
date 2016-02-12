@@ -244,8 +244,8 @@ export class TextDocument implements vscode.TextDocument {
 		const lines = this.lines.slice(range.start.line, range.end.line + 1);
 		return lines.reduce((prev, cur, i) => {
 			const from = (i === 0) ? range.start.character : 0;
-			const length = (i === lines.length - 1) && range.end.character - 1;
-			return prev + cur.text.substr(from, length);
+			const length = (i === lines.length - 1) && range.end.character;
+			return prev + cur.text.substring(from, length);
 		}, '');
 	}
 
@@ -322,7 +322,10 @@ export class TextLine implements vscode.TextLine {
 	 * The range this line covers without the line separator characters.
 	 */
 	public get range(): Range {
-		throw new Error('Not implemented');
+		return new Range(
+			new Position(this.lineNumber, 0),
+			new Position(this.lineNumber, this.text.length)
+		);
 	}
 
 	/**

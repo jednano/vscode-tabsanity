@@ -28,6 +28,8 @@ _Pro Tip: In lieu of the `tabSize` setting being read for this extension, it is 
 
 - Multiple selections that overlap throw an error; instead, they should merge.
 - Too many commands seem to be undone in a single undo command (requires research).
+- There are no plans to support mixed tabs and spaces within the range of indentation.
+	- It is perfectly acceptable to have tabs for indentation and spaces that follow for alignment and is not considered mixing tabs with spaces.
 
 ## Related extensions
 
