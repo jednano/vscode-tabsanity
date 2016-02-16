@@ -21,7 +21,6 @@ _Pro Tip: In lieu of the `tabSize` setting being read for this extension, it is 
 
 ## On the backlog
 
-- Lint TypeScript source code.
 - Look into code coverage solutions that are compatible with TypeScript.
 
 ## Known issues

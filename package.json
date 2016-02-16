@@ -90,9 +90,12 @@
     "postinstall": "node ./node_modules/vscode/bin/install",
     "vscode:prepublish": "node ./node_modules/vscode/bin/compile",
     "compile": "node ./node_modules/vscode/bin/compile -watch -p ./",
+    "pretest": "npm run lint",
+    "lint": "tslint ./src/**/*.ts ./test/**/*.ts",
     "test": "node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
+    "tslint": "^3.3.0",
     "typescript": "^1.7.5",
     "vscode": "^0.11.1"
   }

@@ -1,12 +1,9 @@
 'use strict';
 
 import {
-	commands,
 	Position,
 	Range,
 	Selection,
-	TextDocument,
-	TextEditor,
 	window
 } from 'vscode';
 
@@ -192,7 +189,7 @@ export class TabSanity {
 	private findNextTabStop(pos: Position) {
 		let spaces = this.tabSize;
 		let nextTabStop = pos.character + spaces;
-		const textLine = this.doc.lineAt(pos.line)
+		const textLine = this.doc.lineAt(pos.line);
 		const lineLength = textLine.text.length;
 		if (nextTabStop > lineLength) {
 			nextTabStop = lineLength;

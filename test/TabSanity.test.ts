@@ -1,15 +1,10 @@
 'use strict';
 
-import { EOL } from 'os';
 import * as assert from 'assert';
 import { join } from 'path';
 import {
-	commands,
 	Position,
-	Selection,
-	TextDocument,
-	TextEditor,
-	window
+	Selection
 } from 'vscode';
 
 import { TabSanity } from '../src/TabSanity';
@@ -36,7 +31,7 @@ suite('TabSanity Tests', () => {
 				insertSpaces: true,
 				tabSize: 4
 			};
-		})
+		});
 	});
 
 	suiteTeardown(cleanupWorkspace);
@@ -79,8 +74,6 @@ suite('TabSanity Tests', () => {
 				}
 				ts.cursorRightSelect();
 				const sel = ts.editor.selection;
-				const anchor = sel.anchor;
-				const active = sel.active;
 				assert.strictEqual(
 					sel.anchor.isEqual(firstAnchor),
 					true,
@@ -134,8 +127,6 @@ suite('TabSanity Tests', () => {
 				}
 				ts.cursorLeftSelect();
 				const sel = ts.editor.selection;
-				const anchor = sel.anchor;
-				const active = sel.active;
 				assert.strictEqual(
 					sel.anchor.isEqual(firstAnchor),
 					true,

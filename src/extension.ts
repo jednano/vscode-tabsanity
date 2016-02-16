@@ -2,8 +2,7 @@
 
 import {
 	commands,
-	ExtensionContext,
-	window
+	ExtensionContext
 } from 'vscode';
 
 import { TabSanity } from './TabSanity';
