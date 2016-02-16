@@ -15,14 +15,8 @@ const ALL_SPACES = /^ +$/;
 
 export class TabSanity {
 
-	private _editor: TextEditor;
-
-	constructor(editor?: TextEditor) {
-		this._editor = editor;
-	}
-
 	public get editor() {
-		return this._editor || window.activeTextEditor;
+		return window.activeTextEditor;
 	}
 
 	public get doc() {
