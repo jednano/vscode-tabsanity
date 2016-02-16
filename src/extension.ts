@@ -1,10 +1,12 @@
+'use strict';
+
 import {
 	commands,
 	ExtensionContext,
 	window
 } from 'vscode';
 
-import TabSanity from './TabSanity';
+import { TabSanity } from './TabSanity';
 
 export function activate(context: ExtensionContext) {
 	const tabSanity = new TabSanity();

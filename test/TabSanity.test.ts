@@ -1,24 +1,46 @@
+'use strict';
+
 import { EOL } from 'os';
 import * as assert from 'assert';
+import { join } from 'path';
 import {
+	commands,
 	Position,
-	Selection
-} from 'vscode';
-
-import TabSanity from '../src/TabSanity';
-import {
+	Selection,
 	TextDocument,
 	TextEditor,
-	TextLine
-} from './Mocks';
+	window
+} from 'vscode';
+
+import { TabSanity } from '../src/TabSanity';
+import {
+	cleanupWorkspace,
+	setupWorkspace
+} from './testUtils';
 
 suite('TabSanity Tests', () => {
 
-	const ts = createTabSanityFromLines([
-		'    foo  ',
-		'  bar    ',
-		'          baz    qux '
-	]);
+	let ts: TabSanity;
+
+	suiteSetup(() => {
+		return setupWorkspace(join(
+			__dirname,
+			'..',
+			'..',
+			'test',
+			'fixtures',
+			'spaces'
+		)).then(() => {
+			ts = new TabSanity();
+			ts.editor.options = {
+				insertSpaces: true,
+				tabSize: 4
+			};
+		})
+	});
+
+	suiteTeardown(cleanupWorkspace);
+
 	const expectedStops = [
 		[0, 4, 5, 6, 7, 8, 9],
 		[0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
@@ -35,7 +57,11 @@ suite('TabSanity Tests', () => {
 				}
 				const actual = ts.cursorRight().character;
 				const expected = stops[j];
-				assert.strictEqual(actual, expected);
+				assert.strictEqual(
+					actual,
+					expected,
+					`line: ${i}, char: ${expected}`
+				);
 			}
 		}
 	});
@@ -52,10 +78,20 @@ suite('TabSanity Tests', () => {
 					continue;
 				}
 				ts.cursorRightSelect();
-				const { anchor, active } = ts.editor.selection;
-				assert.strictEqual(anchor.isEqual(firstAnchor), true);
+				const sel = ts.editor.selection;
+				const anchor = sel.anchor;
+				const active = sel.active;
+				assert.strictEqual(
+					sel.anchor.isEqual(firstAnchor),
+					true,
+					`first anchor is not the same`
+				);
 				const expected = new Position(i, stop);
-				assert.strictEqual(active.isEqual(expected), true);
+				assert.strictEqual(
+					sel.active.isEqual(expected),
+					true,
+					`line: ${i}, char: ${stop}`
+				);
 			}
 		}
 	});
@@ -73,7 +109,11 @@ suite('TabSanity Tests', () => {
 				}
 				const actual = ts.cursorLeft().character;
 				const expected = stops[j];
-				assert.strictEqual(actual, expected);
+				assert.strictEqual(
+					actual,
+					expected,
+					`line: ${i}, char: ${expected}`
+				);
 			}
 		}
 	});
@@ -93,10 +133,20 @@ suite('TabSanity Tests', () => {
 					continue;
 				}
 				ts.cursorLeftSelect();
-				const { anchor, active } = ts.editor.selection;
-				assert.strictEqual(anchor.isEqual(firstAnchor), true);
+				const sel = ts.editor.selection;
+				const anchor = sel.anchor;
+				const active = sel.active;
+				assert.strictEqual(
+					sel.anchor.isEqual(firstAnchor),
+					true,
+					`first anchor is not the same`
+				);
 				const expected = new Position(i, stop);
-				assert.strictEqual(active.isEqual(expected), true);
+				assert.strictEqual(
+					sel.active.isEqual(expected),
+					true,
+					`line: ${i}, char: ${stop}`
+				);
 			}
 		}
 	});
@@ -116,11 +166,3 @@ suite('TabSanity Tests', () => {
 	}
 
 });
-
-function createTabSanityFromLines(lines: string[]) {
-	const doc = new TextDocument(lines.map((line, i) => {
-		return new TextLine(line, EOL, i)
-	}));
-	const editor = new TextEditor(doc);
-	return new TabSanity(editor);
-}

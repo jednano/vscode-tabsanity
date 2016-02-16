@@ -1,3 +1,5 @@
+'use strict';
+
 import {
 	commands,
 	Position,
@@ -9,10 +11,10 @@ import {
 } from 'vscode';
 
 const TAB = '\t';
+const ALL_SPACES = /^ +$/;
 
-export default class TabSanity {
+export class TabSanity {
 
-	private allSpaces = /^ +$/;
 	private _editor: TextEditor;
 
 	constructor(editor?: TextEditor) {
@@ -32,7 +34,9 @@ export default class TabSanity {
 	}
 
 	public cursorLeft() {
-		const { start, isEmpty } = this.editor.selection;
+		const sel = this.editor.selection;
+		const start = sel.start;
+		const isEmpty = sel.isEmpty;
 		if (!isEmpty) {
 			this.moveToPosition(start);
 			return;
@@ -40,7 +44,8 @@ export default class TabSanity {
 		return this.moveToPosition(this.findNextLeftPosition(start));
 	}
 
-	private moveToPosition(anchor: Position, active = anchor) {
+	private moveToPosition(anchor: Position, active?: Position) {
+		active = active || anchor;
 		const newSelection = new Selection(anchor, active);
 		this.editor.selections = [newSelection];
 		this.editor.revealRange(newSelection);
@@ -80,7 +85,7 @@ export default class TabSanity {
 	private isWithinAlignmentRange(pos: Position) {
 		const extraSpaces = pos.character % this.tabSize;
 		const nextTabStop = this.tabSize - extraSpaces;
-		return !this.allSpaces.test(this.peekRight(pos, nextTabStop));
+		return !ALL_SPACES.test(this.peekRight(pos, nextTabStop));
 	}
 
 	private isBeginningOfLine(pos: Position) {
@@ -115,7 +120,8 @@ export default class TabSanity {
 		));
 	}
 
-	private findFirstNonWhitespace(lineNumber: number, offset = 0) {
+	private findFirstNonWhitespace(lineNumber: number, offset?: number) {
+		offset = offset || 0;
 		const line = this.doc.lineAt(lineNumber);
 		let character = line.firstNonWhitespaceCharacterIndex + offset;
 		if (character < 0) {
@@ -134,7 +140,9 @@ export default class TabSanity {
 	}
 
 	public cursorRight() {
-		const { end, isEmpty } = this.editor.selection;
+		const sel = this.editor.selection;
+		const end = sel.end;
+		const isEmpty = sel.isEmpty;
 		if (!isEmpty) {
 			this.moveToPosition(end);
 			return;
@@ -211,7 +219,7 @@ export default class TabSanity {
 
 	public deleteLeft() {
 		for (let selection of this.editor.selections) {
-			const { start } = selection;
+			const start = selection.start;
 			if (!selection.isEmpty) {
 				this.delete(selection);
 				continue;
@@ -232,7 +240,7 @@ export default class TabSanity {
 
 	public deleteRight() {
 		for (let selection of this.editor.selections) {
-			const { end } = selection;
+			const end = selection.end;
 			if (!selection.isEmpty) {
 				this.delete(selection);
 				continue;
