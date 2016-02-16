@@ -15,6 +15,7 @@ Navigate or modify soft tabs as if they were hard tabs.
 - The cursor moves by only one space:
 	- If the cursor is detected to be within alignment range.
 	- Or the cursor is detected to be outside of indentation range.
+- Multiple cursors.
 
 _Pro Tip: In lieu of the `tabSize` setting being read for this extension, it is strongly recommended that you also install the [`EditorConfig`][] extension to ensure that the correct `tabSize` setting is being applied per file. Visit [editorconfig.org](http://editorconfig.org/) to learn more about the project._
 
@@ -25,7 +26,6 @@ _Pro Tip: In lieu of the `tabSize` setting being read for this extension, it is 
 
 ## Known issues
 
-- Multiple selections that overlap throw an error; instead, they should merge.
 - Too many commands seem to be undone in a single undo command (requires research).
 - There are no plans to support mixed tabs and spaces within the range of indentation.
 	- It is perfectly acceptable to have tabs for indentation and spaces that follow for alignment and is not considered mixing tabs with spaces.

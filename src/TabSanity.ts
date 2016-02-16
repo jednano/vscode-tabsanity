@@ -217,37 +217,37 @@ export class TabSanity {
 		}, this);
 	}
 
-	public deleteLeft() {
+	public async deleteLeft() {
 		for (let selection of this.editor.selections) {
 			const start = selection.start;
 			if (!selection.isEmpty) {
-				this.delete(selection);
+				await this.delete(selection);
 				continue;
 			}
 			const deleteStartPosition = this.findNextLeftPosition(start);
 			if (deleteStartPosition) {
-				this.delete(new Range(deleteStartPosition, start));
+				await this.delete(new Range(deleteStartPosition, start));
 			}
 		}
 		this.editor.revealRange(this.editor.selection);
 	}
 
 	private delete(location: Range|Selection) {
-		this.editor.edit(edit => {
+		return this.editor.edit(edit => {
 			edit.delete(location);
 		});
 	}
 
-	public deleteRight() {
+	public async deleteRight() {
 		for (let selection of this.editor.selections) {
 			const end = selection.end;
 			if (!selection.isEmpty) {
-				this.delete(selection);
+				await this.delete(selection);
 				continue;
 			}
 			const deleteEndPosition = this.findNextRightPosition(end);
 			if (deleteEndPosition) {
-				this.delete(new Range(end, deleteEndPosition));
+				await this.delete(new Range(end, deleteEndPosition));
 			}
 		}
 	}
