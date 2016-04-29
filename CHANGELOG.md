@@ -1,3 +1,6 @@
+## 0.0.6
+- Fix TypeScript syntax bug.
+
 ## 0.0.5
 - Fix multiple cursor navigation.
 

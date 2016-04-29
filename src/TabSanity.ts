@@ -21,7 +21,7 @@ export class TabSanity {
 	}
 
 	private get tabSize() {
-		const { tabSize } = this.editor.options;
+		const tabSize = this.editor.options.tabSize;
 		return (tabSize === 'auto') ? 4 : <number> tabSize;
 	}
 
