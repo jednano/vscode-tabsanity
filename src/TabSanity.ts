@@ -21,26 +21,17 @@ export class TabSanity {
 	}
 
 	private get tabSize() {
-		return this.editor.options.tabSize;
+		const { tabSize } = this.editor.options;
+		return (tabSize === 'auto') ? 4 : <number> tabSize;
 	}
 
 	public cursorLeft() {
-		const sel = this.editor.selection;
-		const start = sel.start;
-		const isEmpty = sel.isEmpty;
-		if (!isEmpty) {
-			this.moveToPosition(start);
-			return;
-		}
-		return this.moveToPosition(this.findNextLeftPosition(start));
-	}
-
-	private moveToPosition(anchor: Position, active?: Position) {
-		active = active || anchor;
-		const newSelection = new Selection(anchor, active);
-		this.editor.selections = [newSelection];
-		this.editor.revealRange(newSelection);
-		return anchor;
+		return this.editor.selections = this.editor.selections.map(sel => {
+			const start = (sel.isEmpty)
+				? this.findNextLeftPosition(sel.start)
+				: sel.start;
+			return new Selection(start, start);
+		});
 	}
 
 	private findNextLeftPosition(pos: Position) {
@@ -131,14 +122,12 @@ export class TabSanity {
 	}
 
 	public cursorRight() {
-		const sel = this.editor.selection;
-		const end = sel.end;
-		const isEmpty = sel.isEmpty;
-		if (!isEmpty) {
-			this.moveToPosition(end);
-			return;
-		}
-		return this.moveToPosition(this.findNextRightPosition(end));
+		return this.editor.selections = this.editor.selections.map(sel => {
+			const end = (sel.isEmpty)
+				? this.findNextRightPosition(sel.end)
+				: sel.end;
+			return new Selection(end, end);
+		});
 	}
 
 	private findNextRightPosition(pos: Position) {

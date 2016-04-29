@@ -2,10 +2,10 @@
   "name": "tabsanity",
   "displayName": "TabSanity",
   "description": "Navigate or modify soft tabs as if they were hard tabs.",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "publisher": "jedmao",
   "engines": {
-    "vscode": "^0.10.6"
+    "vscode": "^0.10.10"
   },
   "author": "Jed Mao",
   "license": "MIT",
@@ -95,8 +95,8 @@
     "test": "node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
-    "tslint": "^3.3.0",
-    "typescript": "^1.7.5",
-    "vscode": "^0.11.1"
+    "tslint": "^3.7.1",
+    "typescript": "^1.8.10",
+    "vscode": "^0.11.10"
   }
 }

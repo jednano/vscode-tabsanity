@@ -50,7 +50,7 @@ suite('TabSanity Tests', () => {
 				if (i === 0 && j === 0) {
 					continue;
 				}
-				const actual = ts.cursorRight().character;
+				const actual = ts.cursorRight()[0].anchor.character;
 				const expected = stops[j];
 				assert.strictEqual(
 					actual,
@@ -100,7 +100,7 @@ suite('TabSanity Tests', () => {
 				) {
 					continue;
 				}
-				const actual = ts.cursorLeft().character;
+				const actual = ts.cursorLeft()[0].anchor.character;
 				const expected = stops[j];
 				assert.strictEqual(
 					actual,
