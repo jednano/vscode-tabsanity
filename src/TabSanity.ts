@@ -26,12 +26,12 @@ export class TabSanity {
 	}
 
 	public cursorLeft() {
-		return this.editor.selections = this.editor.selections.map(sel => {
+		return this.assignSelections(this.editor.selections.map(sel => {
 			const start = (sel.isEmpty)
 				? this.findNextLeftPosition(sel.start)
 				: sel.start;
 			return new Selection(start, start);
-		});
+		}));
 	}
 
 	private findNextLeftPosition(pos: Position) {
@@ -112,22 +112,29 @@ export class TabSanity {
 		return new Position(lineNumber, character);
 	}
 
+	private assignSelections(selections: Selection[]) {
+		const editor = this.editor;
+		editor.selections = selections;
+		editor.revealRange(editor.selections.slice(-1)[0]);
+		return selections;
+	}
+
 	public cursorLeftSelect() {
-		this.editor.selections = this.editor.selections.map(selection => {
+		return this.assignSelections(this.editor.selections.map(selection => {
 			return new Selection(
 				selection.anchor,
 				this.findNextLeftPosition(selection.active)
 			);
-		}, this);
+		}, this));
 	}
 
 	public cursorRight() {
-		return this.editor.selections = this.editor.selections.map(sel => {
+		return this.assignSelections(this.editor.selections.map(sel => {
 			const end = (sel.isEmpty)
 				? this.findNextRightPosition(sel.end)
 				: sel.end;
 			return new Selection(end, end);
-		});
+		}));
 	}
 
 	private findNextRightPosition(pos: Position) {
@@ -189,12 +196,12 @@ export class TabSanity {
 	}
 
 	public cursorRightSelect() {
-		this.editor.selections = this.editor.selections.map(selection => {
+		return this.assignSelections(this.editor.selections.map(selection => {
 			return new Selection(
 				selection.anchor,
 				this.findNextRightPosition(selection.active)
 			);
-		}, this);
+		}, this));
 	}
 
 	public async deleteLeft() {
