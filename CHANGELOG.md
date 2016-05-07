@@ -1,3 +1,6 @@
+# 0.0.7
+- Reveal active selection as selections change.
+
 ## 0.0.6
 - Fix TypeScript syntax bug.
 

@@ -2,7 +2,7 @@
   "name": "tabsanity",
   "displayName": "TabSanity",
   "description": "Navigate or modify soft tabs as if they were hard tabs.",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "publisher": "jedmao",
   "engines": {
     "vscode": "^0.10.10"
