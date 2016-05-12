@@ -2,7 +2,7 @@
   "name": "tabsanity",
   "displayName": "TabSanity",
   "description": "Navigate or modify soft tabs as if they were hard tabs.",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "publisher": "jedmao",
   "engines": {
     "vscode": "^0.10.10"
@@ -15,8 +15,10 @@
   "activationEvents": [
     "onCommand:tabsanity.cursorLeft",
     "onCommand:tabsanity.cursorLeftSelect",
+    "onCommand:tabsanity.cursorHomeSelect",
     "onCommand:tabsanity.cursorRight",
     "onCommand:tabsanity.cursorRightSelect",
+    "onCommand:tabsanity.cursorEndSelect",
     "onCommand:tabsanity.deleteLeft",
     "onCommand:tabsanity.deleteRight"
   ],
@@ -34,6 +36,11 @@
         "when": "editorTextFocus"
       },
       {
+        "key": "shift+home",
+        "command": "tabsanity.cursorHomeSelect",
+        "when": "editorTextFocus"
+      },
+      {
         "key": "right",
         "command": "tabsanity.cursorRight",
         "when": "editorTextFocus"
@@ -41,6 +48,11 @@
       {
         "key": "shift+right",
         "command": "tabsanity.cursorRightSelect",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "shift+end",
+        "command": "tabsanity.cursorEndSelect",
         "when": "editorTextFocus"
       },
       {
