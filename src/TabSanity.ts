@@ -128,6 +128,15 @@ export class TabSanity {
 		}, this));
 	}
 
+	public cursorHomeSelect() {
+		return this.assignSelections(this.editor.selections.map(selection => {
+			return new Selection(
+				selection.anchor,
+				this.findFirstNonWhitespace(selection.start.line)
+			);
+		}, this));
+	}
+
 	public cursorRight() {
 		return this.assignSelections(this.editor.selections.map(sel => {
 			const end = (sel.isEmpty)
@@ -200,6 +209,16 @@ export class TabSanity {
 			return new Selection(
 				selection.anchor,
 				this.findNextRightPosition(selection.active)
+			);
+		}, this));
+	}
+
+	public cursorEndSelect() {
+		return this.assignSelections(this.editor.selections.map(selection => {
+			const endLine = this.doc.lineAt(selection.end.line);
+			return new Selection(
+				selection.anchor,
+				new Position(selection.end.line, endLine.text.length)
 			);
 		}, this));
 	}

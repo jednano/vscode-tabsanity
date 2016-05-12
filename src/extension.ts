@@ -14,8 +14,10 @@ export function activate(context: ExtensionContext) {
 		[
 			'cursorLeft',
 			'cursorLeftSelect',
+			'cursorHomeSelect',
 			'cursorRight',
 			'cursorRightSelect',
+			'cursorEndSelect',
 			'deleteLeft',
 			'deleteRight'
 		].map(command => {
