@@ -2,10 +2,10 @@
   "name": "tabsanity",
   "displayName": "TabSanity",
   "description": "Navigate or modify soft tabs as if they were hard tabs.",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "publisher": "jedmao",
   "engines": {
-    "vscode": "^0.10.10"
+    "vscode": "^1.4.0"
   },
   "author": "Jed Mao",
   "license": "MIT",
@@ -98,17 +98,22 @@
       }
     ]
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jedmao/vscode-tabsanity.git"
+  },
   "scripts": {
-    "postinstall": "node ./node_modules/vscode/bin/install",
-    "vscode:prepublish": "node ./node_modules/vscode/bin/compile",
-    "compile": "node ./node_modules/vscode/bin/compile -watch -p ./",
-    "pretest": "npm run lint",
+    "compile": "node ./node_modules/vscode/bin/compile",
+    "compile:w": "node ./node_modules/vscode/bin/compile -watch -p ./",
+    "pretest": "npm run compile",
+    "test": "npm run lint && node ./node_modules/vscode/bin/test",
     "lint": "tslint ./src/**/*.ts ./test/**/*.ts",
-    "test": "node ./node_modules/vscode/bin/test"
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "vscode:prepublish": "npm run compile"
   },
   "devDependencies": {
     "tslint": "^3.7.1",
     "typescript": "^1.8.10",
-    "vscode": "^0.11.10"
+    "vscode": "^0.11.13"
   }
 }
