@@ -12,6 +12,10 @@ export function activate(context: ExtensionContext) {
 	Array.prototype.push.apply(
 		context.subscriptions,
 		[
+			'cursorUp',
+			'cursorUpSelect',
+			'cursorDown',
+			'cursorDownSelect',
 			'cursorLeft',
 			'cursorLeftSelect',
 			'cursorHomeSelect',
