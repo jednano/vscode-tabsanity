@@ -142,6 +142,27 @@ suite('TabSanity Tests', () => {
 		}
 	});
 
+	test('#selectHome_OnLineWithWhiteSpace_ShouldSelectUpToWhiteSpace', () => {
+		select(new Position(0, 7));
+		let selection = ts.cursorHomeSelect();
+		let actual = selection[0].start.character;
+		let expected = 4;
+		assert.strictEqual(actual, expected);
+	});
+
+	test('#selectHome_AtWhiteSpace_ShouldSelectUpToStartOfLine', () => {
+		select(new Position(0, 4));
+		let selection = ts.cursorHomeSelect();
+		let actual = selection[0].start.character;
+		let expected = 0;
+		assert.strictEqual(actual, expected);
+		ts.cursorHomeSelect();
+	});
+
+	function select(position: Position) {
+		ts.editor.selections = [new Selection(position, position)];
+	}
+
 	function selectBeginningOfDocument() {
 		const docStart = new Position(0, 0);
 		ts.editor.selections = [new Selection(docStart, docStart)];
