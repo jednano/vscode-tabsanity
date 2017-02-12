@@ -126,20 +126,20 @@ export class TabSanity {
 	}
 
 	public cursorLeftSelect() {
-		return this.assignSelections(this.editor.selections.map(selection => {
+		return this.assignSelections(this.editor.selections.map(sel => {
 			return new Selection(
-				selection.anchor,
-				this.findNextLeftPosition(selection.active)
+				sel.anchor,
+				this.findNextLeftPosition(sel.active)
 			);
 		}, this));
 	}
 
 	public cursorHomeSelect() {
-		return this.assignSelections(this.editor.selections.map(selection => {
-			let newStart = this.findFirstNonWhitespace(selection.start.line);
+		return this.assignSelections(this.editor.selections.map(sel => {
+			let newStart = this.findFirstNonWhitespace(sel.start.line);
 			return new Selection(
-				selection.anchor,
-				this.fallbackToStartOfLine(selection.start, newStart)
+				sel.anchor,
+				this.fallbackToStartOfLine(sel.start, newStart)
 			);
 		}, this));
 	}
@@ -212,20 +212,20 @@ export class TabSanity {
 	}
 
 	public cursorRightSelect() {
-		return this.assignSelections(this.editor.selections.map(selection => {
+		return this.assignSelections(this.editor.selections.map(sel => {
 			return new Selection(
-				selection.anchor,
-				this.findNextRightPosition(selection.active)
+				sel.anchor,
+				this.findNextRightPosition(sel.active)
 			);
 		}, this));
 	}
 
 	public cursorEndSelect() {
-		return this.assignSelections(this.editor.selections.map(selection => {
-			const endLine = this.doc.lineAt(selection.end.line);
+		return this.assignSelections(this.editor.selections.map(sel => {
+			const endLine = this.doc.lineAt(sel.end.line);
 			return new Selection(
-				selection.anchor,
-				new Position(selection.end.line, endLine.text.length)
+				sel.anchor,
+				new Position(sel.end.line, endLine.text.length)
 			);
 		}, this));
 	}

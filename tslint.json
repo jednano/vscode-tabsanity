@@ -19,21 +19,18 @@
 		"no-any": true,
 		"no-arg": true,
 		"no-conditional-assignment": true,
-		"no-consecutive-blank-lines": true,
-		"no-console": true,
+		"no-consecutive-blank-lines": [true],
+		"no-console": [true],
 		"no-debugger": true,
-		"no-duplicate-key": true,
 		"no-duplicate-variable": true,
 		"no-empty": true,
 		"no-eval": true,
-		"no-inferrable-types": true,
+		"no-inferrable-types": [true],
 		"no-internal-module": true,
 		"no-shadowed-variable": true,
 		"no-string-literal": true,
 		"no-trailing-whitespace": true,
-		"no-unreachable": true,
 		"no-unused-expression": true,
-		"no-unused-variable": true,
 		"no-use-before-declare": true,
 		"no-var-keyword": true,
 		"one-line": [
@@ -49,7 +46,7 @@
 			"single",
 			"avoid-escape"
 		],
-		"semicolon": true,
+		"semicolon": [true],
 		"trailing-comma": [
 			true,
 			"never",
@@ -57,15 +54,11 @@
 			"singleline"
 		],
 		"triple-equals": true,
-		"use-strict": true,
 		"variable-name": [
 			true,
-			{
-				"check-format": [
-					"allow-leading-underscore"
-				],
-				"ban-keywords": true
-			}
+			"check-format",
+			"allow-leading-underscore",
+			"ban-keywords"
 		],
 		"whitespace": [
 			true,

@@ -5,7 +5,7 @@
   "version": "0.0.9",
   "publisher": "jedmao",
   "engines": {
-    "vscode": "^1.4.0"
+    "vscode": "^1.9.1"
   },
   "author": "Jed Mao",
   "license": "MIT",
@@ -103,17 +103,21 @@
     "url": "https://github.com/jedmao/vscode-tabsanity.git"
   },
   "scripts": {
-    "compile": "node ./node_modules/vscode/bin/compile",
-    "compile:w": "node ./node_modules/vscode/bin/compile -watch -p ./",
-    "pretest": "npm run compile",
-    "test": "npm run lint && node ./node_modules/vscode/bin/test",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run lint && npm run compile",
+    "test": "node ./node_modules/vscode/bin/test",
     "lint": "tslint ./src/**/*.ts ./test/**/*.ts",
     "postinstall": "node ./node_modules/vscode/bin/install",
     "vscode:prepublish": "npm run compile"
   },
   "devDependencies": {
-    "tslint": "^3.7.1",
-    "typescript": "^1.8.10",
-    "vscode": "^0.11.13"
+    "@types/mocha": "^2.2.39",
+    "@types/node": "^7.0.5",
+    "mocha": "^3.2.0",
+    "tslint": "^4.4.2",
+    "typescript": "^2.1.6",
+    "vscode": "^1.0.3",
+    "vscode-test-utils": "^0.0.6"
   }
 }

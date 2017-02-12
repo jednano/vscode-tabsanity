@@ -8,17 +8,14 @@ import {
 } from 'vscode';
 
 import { TabSanity } from '../src/TabSanity';
-import {
-	cleanupWorkspace,
-	setupWorkspace
-} from './testUtils';
+import { closeAllFiles, openFile } from 'vscode-test-utils';
 
 suite('TabSanity Tests', () => {
 
 	let ts: TabSanity;
 
 	suiteSetup(() => {
-		return setupWorkspace(join(
+		return openFile(join(
 			__dirname,
 			'..',
 			'..',
@@ -34,7 +31,7 @@ suite('TabSanity Tests', () => {
 		});
 	});
 
-	suiteTeardown(cleanupWorkspace);
+	suiteTeardown(closeAllFiles);
 
 	const expectedStops = [
 		[0, 4, 5, 6, 7, 8, 9],
