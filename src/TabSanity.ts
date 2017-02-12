@@ -119,6 +119,12 @@ export class TabSanity {
 		return selections;
 	}
 
+	private fallbackToStartOfLine(start: Position, newStart: Position) {
+		return (start.isEqual(newStart)
+			? new Position(start.line, 0)
+			: newStart);
+	}
+
 	public cursorLeftSelect() {
 		return this.assignSelections(this.editor.selections.map(selection => {
 			return new Selection(
@@ -130,9 +136,10 @@ export class TabSanity {
 
 	public cursorHomeSelect() {
 		return this.assignSelections(this.editor.selections.map(selection => {
+			let newStart = this.findFirstNonWhitespace(selection.start.line);
 			return new Selection(
 				selection.anchor,
-				this.findFirstNonWhitespace(selection.start.line)
+				this.fallbackToStartOfLine(selection.start, newStart)
 			);
 		}, this));
 	}
