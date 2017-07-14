@@ -1,6 +1,7 @@
 'use strict';
 
 import {
+	commands,
 	Position,
 	Range,
 	Selection,
@@ -22,10 +23,102 @@ export class TabSanity {
 
 	private get tabSize() {
 		const tabSize = this.editor.options.tabSize;
-		return (tabSize === 'auto') ? 4 : <number> tabSize;
+		return (tabSize === 'auto') ? 4 : tabSize as number;
 	}
 
-	public cursorLeft() {
+	public async cursorUp() {
+		if (!this.editor.options.insertSpaces) {
+			return await commands.executeCommand('cursorMove', {
+				to: 'up',
+				by: 'wrappedLine'
+			});
+		}
+		return this.assignSelections(this.editor.selections.map(sel => {
+			const newPos = (sel.start.line === 0)
+				? sel.start.with(0, 0)
+				: this.findTabStopPositionIfWithinLeadingWhitespace(
+					sel.start.with(sel.start.line - 1)
+				);
+			return new Selection(newPos, newPos);
+		}));
+	}
+
+	public async cursorUpSelect() {
+		if (!this.editor.options.insertSpaces) {
+			return await commands.executeCommand('cursorMove', {
+				to: 'up',
+				by: 'wrappedLine',
+				select: true
+			});
+		}
+		return this.assignSelections(this.editor.selections.map(sel => {
+			const newActivePos = (sel.start.line === 0)
+				? sel.start.with(0, 0)
+				: this.findTabStopPositionIfWithinLeadingWhitespace(
+					sel.active.with(sel.active.line - 1)
+				);
+			return new Selection(sel.anchor, newActivePos);
+		}));
+	}
+
+	public async cursorDown() {
+		if (!this.editor.options.insertSpaces) {
+			return await commands.executeCommand('cursorMove', {
+				to: 'down',
+				by: 'wrappedLine'
+			});
+		}
+		return this.assignSelections(this.editor.selections.map(sel => {
+			const newPos = (sel.end.line + 1 === this.doc.lineCount)
+				? sel.end.with(sel.end.line, this.lastCharacter(sel.end))
+				: this.findTabStopPositionIfWithinLeadingWhitespace(
+					sel.end.with(sel.end.line + 1)
+				);
+			return new Selection(newPos, newPos);
+		}));
+	}
+
+	private lastCharacter(pos: Position) {
+		const line = this.doc.lineAt(pos);
+		return line.range.end.character;
+	}
+
+	public async cursorDownSelect() {
+		if (!this.editor.options.insertSpaces) {
+			return await commands.executeCommand('cursorMove', {
+				to: 'down',
+				by: 'wrappedLine',
+				select: true
+			});
+		}
+		return this.assignSelections(this.editor.selections.map(sel => {
+			const newActivePos = (sel.end.line + 1 === this.doc.lineCount)
+				? sel.end.with(sel.end.line, this.lastCharacter(sel.end))
+				: this.findTabStopPositionIfWithinLeadingWhitespace(
+					sel.active.with(sel.active.line + 1)
+				);
+			return new Selection(sel.anchor, newActivePos);
+		}));
+	}
+
+	private findTabStopPositionIfWithinLeadingWhitespace(pos: Position) {
+		if (this.isWithinLeadingWhitespace(pos)) {
+			const remainder = pos.character % this.tabSize;
+			const offset = (remainder / this.tabSize > .5)
+				? remainder - this.tabSize
+				: remainder;
+			pos = pos.with(pos.line, pos.character - offset);
+		}
+		return pos;
+	}
+
+	public async cursorLeft() {
+		if (!this.editor.options.insertSpaces) {
+			return await commands.executeCommand('cursorMove', {
+				to: 'left',
+				by: 'character'
+			});
+		}
 		return this.assignSelections(this.editor.selections.map(sel => {
 			const start = (sel.isEmpty)
 				? this.findNextLeftPosition(sel.start)
@@ -36,10 +129,7 @@ export class TabSanity {
 
 	private findNextLeftPosition(pos: Position) {
 		if (this.isBeginningOfLine(pos)) {
-			if (this.isFirstLine(pos)) {
-				return pos;
-			}
-			return this.endOfPreviousLine(pos);
+			return (this.isFirstLine(pos)) ? pos : this.endOfPreviousLine(pos);
 		}
 
 		const previousPosition = pos.with(pos.line, pos.character - 1);
@@ -119,13 +209,14 @@ export class TabSanity {
 		return selections;
 	}
 
-	private fallbackToStartOfLine(start: Position, newStart: Position) {
-		return (start.isEqual(newStart)
-			? new Position(start.line, 0)
-			: newStart);
-	}
-
-	public cursorLeftSelect() {
+	public async cursorLeftSelect() {
+		if (!this.editor.options.insertSpaces) {
+			return await commands.executeCommand('cursorMove', {
+				to: 'left',
+				by: 'character',
+				select: true
+			});
+		}
 		return this.assignSelections(this.editor.selections.map(sel => {
 			return new Selection(
 				sel.anchor,
@@ -139,12 +230,24 @@ export class TabSanity {
 			let newStart = this.findFirstNonWhitespace(sel.start.line);
 			return new Selection(
 				sel.anchor,
-				this.fallbackToStartOfLine(sel.start, newStart)
+				fallbackToStartOfLine(sel.start, newStart)
 			);
 		}, this));
+
+		function fallbackToStartOfLine(start: Position, newStart: Position) {
+			return (start.isEqual(newStart)
+				? new Position(start.line, 0)
+				: newStart);
+		}
 	}
 
-	public cursorRight() {
+	public async cursorRight() {
+		if (!this.editor.options.insertSpaces) {
+			return await commands.executeCommand('cursorMove', {
+				to: 'right',
+				by: 'character'
+			});
+		}
 		return this.assignSelections(this.editor.selections.map(sel => {
 			const end = (sel.isEmpty)
 				? this.findNextRightPosition(sel.end)
@@ -211,7 +314,14 @@ export class TabSanity {
 		return pos.with(pos.line, nextTabStop);
 	}
 
-	public cursorRightSelect() {
+	public async cursorRightSelect() {
+		if (!this.editor.options.insertSpaces) {
+			return await commands.executeCommand('cursorMove', {
+				to: 'right',
+				by: 'character',
+				select: true
+			});
+		}
 		return this.assignSelections(this.editor.selections.map(sel => {
 			return new Selection(
 				sel.anchor,
@@ -264,5 +374,4 @@ export class TabSanity {
 			}
 		}
 	}
-
 }

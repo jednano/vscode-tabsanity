@@ -2,7 +2,7 @@
   "name": "tabsanity",
   "displayName": "TabSanity",
   "description": "Navigate or modify soft tabs as if they were hard tabs.",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "publisher": "jedmao",
   "engines": {
     "vscode": "^1.9.1"
@@ -13,6 +13,10 @@
     "Other"
   ],
   "activationEvents": [
+    "onCommand:tabsanity.cursorUp",
+    "onCommand:tabsanity.cursorUpSelect",
+    "onCommand:tabsanity.cursorDown",
+    "onCommand:tabsanity.cursorDownSelect",
     "onCommand:tabsanity.cursorLeft",
     "onCommand:tabsanity.cursorLeftSelect",
     "onCommand:tabsanity.cursorHomeSelect",
@@ -25,6 +29,26 @@
   "main": "./out/src/extension",
   "contributes": {
     "keybindings": [
+      {
+        "key": "up",
+        "command": "tabsanity.cursorUp",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "shift+up",
+        "command": "tabsanity.cursorUpSelect",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "down",
+        "command": "tabsanity.cursorDown",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "shift+down",
+        "command": "tabsanity.cursorDownSelect",
+        "when": "editorTextFocus"
+      },
       {
         "key": "left",
         "command": "tabsanity.cursorLeft",
@@ -73,20 +97,44 @@
     ],
     "commands": [
       {
+        "command": "tabsanity.cursorUp",
+        "title": "TabSanity: Move cursor(s) up"
+      },
+      {
+        "command": "tabsanity.cursorUpSelect",
+        "title": "TabSanity: Move cursor(s) up and select"
+      },
+      {
+        "command": "tabsanity.cursorDown",
+        "title": "TabSanity: Move cursor(s) down"
+      },
+      {
+        "command": "tabsanity.cursorDownSelect",
+        "title": "TabSanity: Move cursor(s) down and select"
+      },
+      {
         "command": "tabsanity.cursorLeft",
-        "title": "TabSanity: Move cursor left"
+        "title": "TabSanity: Move cursor(s) left"
       },
       {
         "command": "tabsanity.cursorLeftSelect",
-        "title": "TabSanity: Move cursor left and select"
+        "title": "TabSanity: Move cursor(s) left and select"
+      },
+      {
+        "command": "tabsanity.cursorHomeSelect",
+        "title": "TabSanity: Move cursor(s) home and select"
       },
       {
         "command": "tabsanity.cursorRight",
-        "title": "TabSanity: Move cursor right"
+        "title": "TabSanity: Move cursor(s) right"
       },
       {
         "command": "tabsanity.cursorRightSelect",
-        "title": "TabSanity: Move cursor right and select"
+        "title": "TabSanity: Move cursor(s) right and select"
+      },
+      {
+        "command": "tabsanity.cursorEndSelect",
+        "title": "TabSanity: Move cursor(s) end and select"
       },
       {
         "command": "tabsanity.deleteLeft",

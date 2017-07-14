@@ -1,8 +1,11 @@
+## 0.0.10
+- Add `#cursorUp`, `#cursorUpSelect` and `#cursorDown`, `#cursorDownSelect`.
+
 ## 0.0.9
 - Fix shift+home to select to beginning of line [#12](https://github.com/jedmao/vscode-tabsanity/pull/12). Thanks [@Lavinski](https://github.com/Lavinski)!
 
 ## 0.0.8
-- Add `#cursorHomeSelect` and `#cursorEndSelect`
+- Add `#cursorHomeSelect` and `#cursorEndSelect`.
 
 ## 0.0.7
 - Reveal active selection as selections change.
