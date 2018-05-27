@@ -1,3 +1,6 @@
+## 0.0.11
+- Restore "delete right" functionality.
+
 ## 0.0.10
 - Fix/remove backspace + delete functionality, which is now baked into vscode [#17](https://github.com/jedmao/vscode-tabsanity/issues/17).
 - Update dev dependencies.
