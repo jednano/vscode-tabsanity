@@ -1,3 +1,7 @@
+## 0.0.10
+- Fix/remove backspace + delete functionality, which is now baked into vscode [#17](https://github.com/jedmao/vscode-tabsanity/issues/17).
+- Update dev dependencies.
+
 ## 0.0.9
 - Fix shift+home to select to beginning of line [#12](https://github.com/jedmao/vscode-tabsanity/pull/12). Thanks [@Lavinski](https://github.com/Lavinski)!
 
