@@ -18,9 +18,7 @@
     "onCommand:tabsanity.cursorHomeSelect",
     "onCommand:tabsanity.cursorRight",
     "onCommand:tabsanity.cursorRightSelect",
-    "onCommand:tabsanity.cursorEndSelect",
-    "onCommand:tabsanity.deleteLeft",
-    "onCommand:tabsanity.deleteRight"
+    "onCommand:tabsanity.cursorEndSelect"
   ],
   "main": "./out/src/extension",
   "contributes": {
@@ -54,21 +52,6 @@
         "key": "shift+end",
         "command": "tabsanity.cursorEndSelect",
         "when": "editorTextFocus"
-      },
-      {
-        "key": "shift+backspace",
-        "command": "tabsanity.deleteLeft",
-        "when": "editorTextFocus"
-      },
-      {
-        "key": "backspace",
-        "command": "tabsanity.deleteLeft",
-        "when": "editorTextFocus"
-      },
-      {
-        "key": "delete",
-        "command": "tabsanity.deleteRight",
-        "when": "editorTextFocus"
       }
     ],
     "commands": [
@@ -87,14 +70,6 @@
       {
         "command": "tabsanity.cursorRightSelect",
         "title": "TabSanity: Move cursor right and select"
-      },
-      {
-        "command": "tabsanity.deleteLeft",
-        "title": "TabSanity: Delete left"
-      },
-      {
-        "command": "tabsanity.deleteRight",
-        "title": "TabSanity: Delete right"
       }
     ]
   },

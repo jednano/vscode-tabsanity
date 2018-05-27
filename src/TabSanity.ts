@@ -230,39 +230,4 @@ export class TabSanity {
 		}, this));
 	}
 
-	public async deleteLeft() {
-		for (let selection of this.editor.selections) {
-			const start = selection.start;
-			if (!selection.isEmpty) {
-				await this.delete(selection);
-				continue;
-			}
-			const deleteStartPosition = this.findNextLeftPosition(start);
-			if (deleteStartPosition) {
-				await this.delete(new Range(deleteStartPosition, start));
-			}
-		}
-		this.editor.revealRange(this.editor.selection);
-	}
-
-	private delete(location: Range|Selection) {
-		return this.editor.edit(edit => {
-			edit.delete(location);
-		});
-	}
-
-	public async deleteRight() {
-		for (let selection of this.editor.selections) {
-			const end = selection.end;
-			if (!selection.isEmpty) {
-				await this.delete(selection);
-				continue;
-			}
-			const deleteEndPosition = this.findNextRightPosition(end);
-			if (deleteEndPosition) {
-				await this.delete(new Range(end, deleteEndPosition));
-			}
-		}
-	}
-
 }

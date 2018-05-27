@@ -17,9 +17,7 @@ export function activate(context: ExtensionContext) {
 			'cursorHomeSelect',
 			'cursorRight',
 			'cursorRightSelect',
-			'cursorEndSelect',
-			'deleteLeft',
-			'deleteRight'
+			'cursorEndSelect'
 		].map(command => {
 			return commands.registerCommand(
 				`tabsanity.${command}`,
