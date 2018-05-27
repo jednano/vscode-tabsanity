@@ -230,4 +230,24 @@ export class TabSanity {
 		}, this));
 	}
 
+	private delete(location: Range | Selection) {
+		return this.editor.edit(edit => {
+			edit.delete(location);
+		});
+	}
+
+	public async deleteRight() {
+		for (let selection of this.editor.selections) {
+			const end = selection.end;
+			if (!selection.isEmpty) {
+				await this.delete(selection);
+				continue;
+			}
+			const deleteEndPosition = this.findNextRightPosition(end);
+			if (deleteEndPosition) {
+				await this.delete(new Range(end, deleteEndPosition));
+			}
+		}
+	}
+
 }

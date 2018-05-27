@@ -2,7 +2,7 @@
   "name": "tabsanity",
   "displayName": "TabSanity",
   "description": "Navigate or modify soft tabs as if they were hard tabs.",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "publisher": "jedmao",
   "engines": {
     "vscode": "^1.23.1"
@@ -18,7 +18,8 @@
     "onCommand:tabsanity.cursorHomeSelect",
     "onCommand:tabsanity.cursorRight",
     "onCommand:tabsanity.cursorRightSelect",
-    "onCommand:tabsanity.cursorEndSelect"
+    "onCommand:tabsanity.cursorEndSelect",
+    "onCommand:tabsanity.deleteRight"
   ],
   "main": "./out/src/extension",
   "contributes": {
@@ -52,6 +53,11 @@
         "key": "shift+end",
         "command": "tabsanity.cursorEndSelect",
         "when": "editorTextFocus"
+      },
+      {
+        "key": "delete",
+        "command": "tabsanity.deleteRight",
+        "when": "editorTextFocus"
       }
     ],
     "commands": [
@@ -70,6 +76,10 @@
       {
         "command": "tabsanity.cursorRightSelect",
         "title": "TabSanity: Move cursor right and select"
+      },
+      {
+        "command": "tabsanity.deleteRight",
+        "title": "TabSanity: Delete right"
       }
     ]
   },
